@@ -10,7 +10,7 @@ namespace BiggestFiles
     {
         private readonly Int32 _fileCount = 20;
         private readonly DirectoryInfo _startingDirectory;
-        private static readonly String OutputFormat = @"{0,15:### ### ### ###} Byte {1}";
+        public static readonly String StandardOutputFormat = @"{0,15:### ### ### ###} Byte {1}";
 
         public Finder(String startingPath)
         {
@@ -19,13 +19,18 @@ namespace BiggestFiles
 
         public IEnumerable<String> FindRecursivly()
         {
-            var biggestFiles = GetBiggestFilesInDirectoryRecursively(_startingDirectory);
+            var biggestFiles = FindFilesRecursively();
             var resultLines = new List<String>();
             foreach (var file in biggestFiles)
             {
-                resultLines.Add(String.Format(OutputFormat, file.Length, file.FullName));
+                resultLines.Add(String.Format(StandardOutputFormat, file.Length, file.FullName));
             }
             return resultLines;
+        }
+
+        public IEnumerable<FileInfo> FindFilesRecursively()
+        {
+            return GetBiggestFilesInDirectoryRecursively(_startingDirectory);
         }
 
         public IEnumerable<FileInfo> GetBiggestFilesInDirectoryRecursively(DirectoryInfo directory)

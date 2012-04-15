@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Windows.Forms;
 using BiggestFiles;
 
@@ -18,8 +19,17 @@ namespace BiggestFileWinFormGui
         {
             var startingWithPath = pathSelectionTextBox.Text;
             var finder = new Finder(startingWithPath);
-            var biggestFiles = finder.FindRecursivly();
-            biggestFilesListBox.DataSource = biggestFiles;
+            var biggestFiles = finder.FindFilesRecursively();
+            var listBoxEntries = from file in biggestFiles
+            select new
+            {
+                FileInfo = file,
+                FileView = String.Format(Finder.StandardOutputFormat, file.Length, file.FullName),
+            };
+
+            biggestFilesListBox.DataSource = listBoxEntries.ToList();
+            biggestFilesListBox.ValueMember = "FileInfo";
+            biggestFilesListBox.DisplayMember = "FileView";
         }
 
         private void pathSelectionButton_Click(object sender, EventArgs e)
