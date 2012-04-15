@@ -21,5 +21,16 @@ namespace BiggestFileWinFormGui
             var biggestFiles = finder.FindRecursivly();
             biggestFilesListBox.DataSource = biggestFiles;
         }
+
+        private void pathSelectionButton_Click(object sender, EventArgs e)
+        {
+            var folderBrowserDialog = new FolderBrowserDialog();
+            folderBrowserDialog.SelectedPath = pathSelectionTextBox.Text;
+            var result = folderBrowserDialog.ShowDialog();
+            if(DialogResult.OK == result)
+            {
+                pathSelectionTextBox.Text = folderBrowserDialog.SelectedPath;
+            }
+        }
     }
 }

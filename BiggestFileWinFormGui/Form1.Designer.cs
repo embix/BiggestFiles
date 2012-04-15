@@ -52,6 +52,7 @@
             this.pathSelectionButton.TabIndex = 1;
             this.pathSelectionButton.Text = "select Path";
             this.pathSelectionButton.UseVisualStyleBackColor = true;
+            this.pathSelectionButton.Click += new System.EventHandler(this.pathSelectionButton_Click);
             // 
             // biggestFilesListBox
             // 
