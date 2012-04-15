@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using BiggestFiles;
+using BiggestFileWinFormGui.Views;
 
 namespace BiggestFileWinFormGui
 {
@@ -13,6 +16,7 @@ namespace BiggestFileWinFormGui
         {
             InitializeComponent();
             pathSelectionTextBox.Text = StardardPath;
+            biggestFilesListBox.DoubleClick += biggestFilesListBox_DoubleClick;
         }
 
         private void searchButton_Click(object sender, EventArgs e)
@@ -21,15 +25,36 @@ namespace BiggestFileWinFormGui
             var finder = new Finder(startingWithPath);
             var biggestFiles = finder.FindFilesRecursively();
             var listBoxEntries = from file in biggestFiles
-            select new
-            {
-                FileInfo = file,
-                FileView = String.Format(Finder.StandardOutputFormat, file.Length, file.FullName),
-            };
-
+                                 select new FileInfoView(file);
             biggestFilesListBox.DataSource = listBoxEntries.ToList();
-            biggestFilesListBox.ValueMember = "FileInfo";
-            biggestFilesListBox.DisplayMember = "FileView";
+        }
+
+        private void biggestFilesListBox_DoubleClick(object sender, EventArgs e)
+        {
+            TryOpenExplorerWithPathToSelectedFile();
+        }
+
+        private void TryOpenExplorerWithPathToSelectedFile()
+        {
+            try
+            {
+                OpenExplorerWithPathToSelectedFile();
+            }catch(Exception ex)
+            {
+                // TODO: Logging, warning (add status line in BigFilesForm)
+            }
+        }
+
+        private void OpenExplorerWithPathToSelectedFile()
+        {
+            var selectedFile = biggestFilesListBox.SelectedItem as FileInfoView;
+            if (selectedFile != null)
+            {
+                var filePath = selectedFile.Info.FullName;
+                var argument = @"/select, " + filePath;
+                var explorerPath = Path.Combine(Environment.SystemDirectory, "explorer.exe");
+                Process.Start(explorerPath, argument);
+            }
         }
 
         private void pathSelectionButton_Click(object sender, EventArgs e)
