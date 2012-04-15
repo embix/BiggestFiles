@@ -57,7 +57,7 @@ namespace BiggestFileCli
             
             // Main Functionality
             var finder = new Finder(_startingPath);
-            foreach (var line in finder.Find())
+            foreach (var line in finder.FindRecursivly())
             {
                 _out.WriteLine(line);
             }
