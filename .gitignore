@@ -79,3 +79,8 @@ Desktop.ini
 
 # NuGet
 packages/
+
+# Spec (contains dotnetpro article, thus it should not be published)
+# see: http://www.dotnetpro.de/articles/onlinearticle4072.aspx
+# given solution: http://www.dotnetpro.de/articles/onlinearticle4081.aspx
+/Spec
