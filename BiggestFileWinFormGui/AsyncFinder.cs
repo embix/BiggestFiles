@@ -18,20 +18,20 @@ namespace BiggestFileWinFormGui
         public AsyncFinder(String startingPath)
         {
             _startingPath = startingPath;
-            //_synchronizationContext = SynchronizationContext.Current ?? new SynchronizationContext();
+            _synchronizationContext = SynchronizationContext.Current ?? new SynchronizationContext();
         }
 
         public void Find()
         {
             _finder = new Finder(_startingPath);
             _finder.FinalResult += HandleTaskFinished;
-            //new Thread(_finder.EventBasedFind).Start();
-            _finder.EventBasedFind();
+            new Thread(_finder.EventBasedFind).Start();
+            
         }
 
         private void HandleTaskFinished(IEnumerable<FileInfo> biggestFiles)
         {
-            //_synchronizationContext.Send(callback => FinalResult(biggestFiles), null);
+            _synchronizationContext.Send(callback => FinalResult(biggestFiles), null);
             _finder.FinalResult -= HandleTaskFinished;
             FinalResult(biggestFiles);
         }
