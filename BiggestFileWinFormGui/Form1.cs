@@ -23,9 +23,12 @@ namespace BiggestFileWinFormGui
         private void searchButton_Click(object sender, EventArgs e)
         {
             var startingWithPath = pathSelectionTextBox.Text;
-            var finder = new Finder(startingWithPath);
-            finder.FinalResult += handleSearchFinished;
-            finder.EventBasedFind();
+            //var finder = new Finder(startingWithPath);
+            //finder.FinalResult += handleSearchFinished;
+            //finder.EventBasedFind();
+            var asyncFinder = new AsyncFinder(startingWithPath);
+            asyncFinder.FinalResult += handleSearchFinished;
+            asyncFinder.Find();
         }
 
         private void handleSearchFinished(IEnumerable<FileInfo> biggestFiles)

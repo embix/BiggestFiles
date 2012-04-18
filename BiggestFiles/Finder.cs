@@ -13,7 +13,6 @@ namespace BiggestFiles
 
         #region Public API
 
-        // used to notify calculation of final result to initial caller
         public event Action<IEnumerable<FileInfo>> FinalResult;
 
         public Finder(String startingPath)
@@ -37,7 +36,7 @@ namespace BiggestFiles
             return GetBiggestFilesInDirectoryRecursively(_startingDirectory);
         }
 
-        public void FindAsync()
+        public void EventBasedFind()
         {
             var result = FindFilesRecursively();
             FinalResult(result);
