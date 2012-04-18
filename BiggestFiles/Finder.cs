@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-// Iteration 1: Spike Solution without any optimization for speed, maintainability or even error handling
 namespace BiggestFiles
 {
     public class Finder
@@ -11,6 +10,11 @@ namespace BiggestFiles
         private readonly Int32 _fileCount = 20;
         private readonly DirectoryInfo _startingDirectory;
         public static readonly String StandardOutputFormat = @"{0,15:### ### ### ###} Byte {1}";
+
+        #region Public API
+
+        // used to notify calculation of final result to initial caller
+        public event Action<IEnumerable<FileInfo>> FinalResult;
 
         public Finder(String startingPath)
         {
@@ -33,7 +37,15 @@ namespace BiggestFiles
             return GetBiggestFilesInDirectoryRecursively(_startingDirectory);
         }
 
-        public IEnumerable<FileInfo> GetBiggestFilesInDirectoryRecursively(DirectoryInfo directory)
+        public void FindAsync()
+        {
+            var result = FindFilesRecursively();
+            FinalResult(result);
+        }
+
+        #endregion Public API
+
+        private IEnumerable<FileInfo> GetBiggestFilesInDirectoryRecursively(DirectoryInfo directory)
         {
             IEnumerable<FileInfo> biggestFilesInCurrentDirectory = TryGetBiggestFilesInCurrentDirectory(directory);
             IEnumerable<DirectoryInfo> directoriesInCurrentDirectory = TryGetDirectoriesInCurrentDirectory(directory);

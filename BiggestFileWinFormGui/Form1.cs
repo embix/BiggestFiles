@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -23,10 +24,15 @@ namespace BiggestFileWinFormGui
         {
             var startingWithPath = pathSelectionTextBox.Text;
             var finder = new Finder(startingWithPath);
-            var biggestFiles = finder.FindFilesRecursively();
+            finder.FinalResult += handleSearchFinished;
+            finder.EventBasedFind();
+        }
+
+        private void handleSearchFinished(IEnumerable<FileInfo> biggestFiles)
+        {
             var listBoxEntries = from file in biggestFiles
                                  select new FileInfoView(file);
-            biggestFilesListBox.DataSource = listBoxEntries.ToList();
+            biggestFilesListBox.DataSource = listBoxEntries.ToList();            
         }
 
         private void biggestFilesListBox_DoubleClick(object sender, EventArgs e)
