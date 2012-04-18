@@ -10,24 +10,29 @@ namespace BiggestFileWinFormGui
 {
     class AsyncFinder
     {
-        private Thread _processingThread;
-
+        private readonly SynchronizationContext _synchronizationContext;
+        private readonly String _startingPath;
+        private Finder _finder;
         public event Action<IEnumerable<FileInfo>> FinalResult;
         
         public AsyncFinder(String startingPath)
         {
-            var finder = new Finder(startingPath);
-            finder.FinalResult += HandleTaskFinished;
-            _processingThread = new Thread(finder.EventBasedFind);
+            _startingPath = startingPath;
+            //_synchronizationContext = SynchronizationContext.Current ?? new SynchronizationContext();
         }
 
         public void Find()
         {
-            _processingThread.Start();
+            _finder = new Finder(_startingPath);
+            _finder.FinalResult += HandleTaskFinished;
+            //new Thread(_finder.EventBasedFind).Start();
+            _finder.EventBasedFind();
         }
 
         private void HandleTaskFinished(IEnumerable<FileInfo> biggestFiles)
         {
+            //_synchronizationContext.Send(callback => FinalResult(biggestFiles), null);
+            _finder.FinalResult -= HandleTaskFinished;
             FinalResult(biggestFiles);
         }
     }
