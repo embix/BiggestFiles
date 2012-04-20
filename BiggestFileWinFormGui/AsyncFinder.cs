@@ -33,7 +33,6 @@ namespace BiggestFileWinFormGui
         {
             _synchronizationContext.Send(callback => FinalResult(biggestFiles), null);
             _finder.FinalResult -= HandleTaskFinished;
-            FinalResult(biggestFiles);
         }
     }
 }
