@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using BiggestFiles;
 
@@ -26,7 +24,11 @@ namespace BiggestFileWinFormGui
             _finder = new Finder(_startingPath);
             _finder.FinalResult += HandleTaskFinished;
             new Thread(_finder.EventBasedFind).Start();
-            
+        }
+
+        public void Abort()
+        {
+            _finder.AbortSearch();
         }
 
         private void HandleTaskFinished(IEnumerable<FileInfo> biggestFiles)

@@ -9,7 +9,9 @@ namespace BiggestFiles
     {
         private readonly Int32 _fileCount = 20;
         private readonly DirectoryInfo _startingDirectory;
+        private Boolean _abortSearch;
         public static readonly String StandardOutputFormat = @"{0,15:### ### ### ###} Byte {1}";
+
 
         #region Public API
 
@@ -38,14 +40,22 @@ namespace BiggestFiles
 
         public void EventBasedFind()
         {
+            _abortSearch = false;
             var result = FindFilesRecursively();
             FinalResult(result);
+        }
+
+        public void AbortSearch()
+        {
+            _abortSearch = true;
         }
 
         #endregion Public API
 
         private IEnumerable<FileInfo> GetBiggestFilesInDirectoryRecursively(DirectoryInfo directory)
         {
+            if(_abortSearch) return new FileInfo[0];
+
             IEnumerable<FileInfo> biggestFilesInCurrentDirectory = TryGetBiggestFilesInCurrentDirectory(directory);
             IEnumerable<DirectoryInfo> directoriesInCurrentDirectory = TryGetDirectoriesInCurrentDirectory(directory);
             foreach (var subDirectory in directoriesInCurrentDirectory)
@@ -54,7 +64,7 @@ namespace BiggestFiles
                 biggestFilesInCurrentDirectory = 
                     biggestFilesInCurrentDirectory.Union(biggestFilesInSubDirectory).OrderByDescending(file => file.Length).Take(_fileCount);
             }
-            return biggestFilesInCurrentDirectory;
+            return biggestFilesInCurrentDirectory.ToArray();// to disable delayed execution
         }
 
         private IEnumerable<DirectoryInfo> TryGetDirectoriesInCurrentDirectory(DirectoryInfo directory)

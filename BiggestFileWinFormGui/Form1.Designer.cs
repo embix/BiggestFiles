@@ -31,7 +31,7 @@
             this.pathSelectionTextBox = new System.Windows.Forms.TextBox();
             this.pathSelectionButton = new System.Windows.Forms.Button();
             this.biggestFilesListBox = new System.Windows.Forms.ListBox();
-            this.searchButton = new System.Windows.Forms.Button();
+            this.actionButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // pathSelectionTextBox
@@ -65,23 +65,23 @@
             this.biggestFilesListBox.Size = new System.Drawing.Size(599, 316);
             this.biggestFilesListBox.TabIndex = 2;
             // 
-            // searchButton
+            // actionButton
             // 
-            this.searchButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.searchButton.Location = new System.Drawing.Point(537, 10);
-            this.searchButton.Name = "searchButton";
-            this.searchButton.Size = new System.Drawing.Size(75, 23);
-            this.searchButton.TabIndex = 3;
-            this.searchButton.Text = "search";
-            this.searchButton.UseVisualStyleBackColor = true;
-            this.searchButton.Click += new System.EventHandler(this.searchButton_Click);
+            this.actionButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.actionButton.Location = new System.Drawing.Point(537, 10);
+            this.actionButton.Name = "actionButton";
+            this.actionButton.Size = new System.Drawing.Size(75, 23);
+            this.actionButton.TabIndex = 3;
+            this.actionButton.Text = "search";
+            this.actionButton.UseVisualStyleBackColor = true;
+            this.actionButton.Click += new System.EventHandler(this.actionButtonClick);
             // 
             // BigFilesForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(624, 362);
-            this.Controls.Add(this.searchButton);
+            this.Controls.Add(this.actionButton);
             this.Controls.Add(this.biggestFilesListBox);
             this.Controls.Add(this.pathSelectionButton);
             this.Controls.Add(this.pathSelectionTextBox);
@@ -97,7 +97,7 @@
         private System.Windows.Forms.TextBox pathSelectionTextBox;
         private System.Windows.Forms.Button pathSelectionButton;
         private System.Windows.Forms.ListBox biggestFilesListBox;
-        private System.Windows.Forms.Button searchButton;
+        private System.Windows.Forms.Button actionButton;
     }
 }
 
