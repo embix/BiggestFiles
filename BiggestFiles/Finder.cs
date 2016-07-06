@@ -78,6 +78,7 @@ namespace BiggestFiles
                     biggestFilesInCurrentDirectory
                     .Union(biggestFilesInSubDirectory)
                     .OrderByDescending(file => file.Length)
+                    .Take(_fileCount)
                     .ToArray();//execute now, thus not gathering ordered enumberables en gros
             }
             return biggestFilesInCurrentDirectory.ToArray();
