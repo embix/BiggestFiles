@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace BiggestFiles
 {
@@ -35,12 +36,12 @@ namespace BiggestFiles
 
         public IEnumerable<FileInfo> FindFilesRecursively()
         {
+            _abortSearch = false;
             return GetBiggestFilesInDirectoryRecursively(_startingDirectory);
         }
 
         public void EventBasedFind()
         {
-            _abortSearch = false;
             var result = FindFilesRecursively();
             FinalResult(result);
         }
@@ -48,6 +49,18 @@ namespace BiggestFiles
         public void AbortSearch()
         {
             _abortSearch = true;
+        }
+
+        public Task<IEnumerable<FileInfo>> FindFilesRecursivelyAsync()
+        {
+            var task = Task.Run(() => FindFilesRecursively());
+            return task;
+        }
+
+        public Task<IEnumerable<String>> FindRecursivelyAsync()
+        {
+            var task = Task.Run(() => FindRecursivly());
+            return task;
         }
 
         #endregion Public API
@@ -62,9 +75,12 @@ namespace BiggestFiles
             {
                 var biggestFilesInSubDirectory = GetBiggestFilesInDirectoryRecursively(subDirectory);
                 biggestFilesInCurrentDirectory = 
-                    biggestFilesInCurrentDirectory.Union(biggestFilesInSubDirectory).OrderByDescending(file => file.Length).Take(_fileCount);
+                    biggestFilesInCurrentDirectory
+                    .Union(biggestFilesInSubDirectory)
+                    .OrderByDescending(file => file.Length)
+                    .ToArray();//execute now, thus not gathering ordered enumberables en gros
             }
-            return biggestFilesInCurrentDirectory.ToArray();// to disable delayed execution
+            return biggestFilesInCurrentDirectory.ToArray();
         }
 
         private IEnumerable<DirectoryInfo> TryGetDirectoriesInCurrentDirectory(DirectoryInfo directory)

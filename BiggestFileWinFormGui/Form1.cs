@@ -4,6 +4,9 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+
+using BiggestFiles;
+
 using BiggestFileWinFormGui.Views;
 
 namespace BiggestFileWinFormGui
@@ -11,7 +14,8 @@ namespace BiggestFileWinFormGui
     public partial class BigFilesForm : Form
     {
         private static readonly String StardardPath = @"C:\";
-        private AsyncFinder _activeFinder;
+        //private AsyncFinder _activeFinder;
+        private Finder _finder;
         private ActionButtonState _actionButtonState;
 
         public BigFilesForm()
@@ -38,35 +42,36 @@ namespace BiggestFileWinFormGui
             actionButton.Text = _actionButtonState.ToString();
         }
 
-        private void actionButtonClick(object sender, EventArgs e)
+        private void ActionButtonClick(object sender, EventArgs e)
         {
             if(ActionButtonState.Search == _actionButtonState)
             {
-                handleSearchButtonClick();
+                HandleSearchButtonClick();
             }else
             {
-                handleAbortButtonClick();
+                HandleAbortButtonClick();
             }   
         }
 
-        private void handleAbortButtonClick()
+        private void HandleAbortButtonClick()
         {
-            _activeFinder.Abort();
+            _finder.AbortSearch();
             SetActionButtonStateSearch();
         }
 
-        private void handleSearchButtonClick()
+        private async void HandleSearchButtonClick()
         {
             var startingWithPath = pathSelectionTextBox.Text;
-            _activeFinder = new AsyncFinder(startingWithPath);
-            _activeFinder.FinalResult += handleSearchFinished;
+            _finder = new Finder(startingWithPath);
             biggestFilesListBox.DataSource = new List<FileInfoView>();
             biggestFilesListBox.DoubleClick -= biggestFilesListBox_DoubleClick;
-            _activeFinder.Find();
-            SetActionButtonStateAbort();
+            SetActionButtonStateAbort();// todo: include abort/cancellation
+
+            var result = await _finder.FindFilesRecursivelyAsync();
+            HandleSearchFinished(result);
         }
 
-        private void handleSearchFinished(IEnumerable<FileInfo> biggestFiles)
+        private void HandleSearchFinished(IEnumerable<FileInfo> biggestFiles)
         {
             var listBoxEntries = from file in biggestFiles
                                  select new FileInfoView(file);

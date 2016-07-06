@@ -74,7 +74,7 @@
             this.actionButton.TabIndex = 3;
             this.actionButton.Text = "search";
             this.actionButton.UseVisualStyleBackColor = true;
-            this.actionButton.Click += new System.EventHandler(this.actionButtonClick);
+            this.actionButton.Click += new System.EventHandler(this.ActionButtonClick);
             // 
             // BigFilesForm
             // 
