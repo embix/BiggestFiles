@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("BiggestFiles")]
-[assembly: AssemblyCopyright("Copyright ©  2012-2013 Michel Bretschneider")]
+[assembly: AssemblyCopyright("Copyright ©  2012-2016 Michel Bretschneider")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
